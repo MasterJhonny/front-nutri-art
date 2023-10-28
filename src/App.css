@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+
+.App ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style-type: none;
+}
+
+.img_logo {
+  width: 200px;
+}
+
+.active {
+  color: #292119;
+  font-weight: bold;
+  transition: all 1s;
+}
+
+a {
+  text-decoration: none;
+  color: #767575;
+  /*background-color: #FAD9E6;
+  padding: 4px 10px;
+  border-radius: 5px;*/
+}
+
+a:active {
+  color: #facc3c;
+}
+
+.login {
+  width: 85%;
+  min-width: 300px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
