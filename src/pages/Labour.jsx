@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 // import component
 import TablaCustom from '../components/TablaCustom';
 import ModalFormEmployes from "../components/ModalFormEmployes";
+import LinearColor from "../components/LinearColor";
 
 // import api employes
 import { getEmployes } from "../api/api.employes";
@@ -16,11 +17,14 @@ function Labour() {
   const handleOpen = () => setOpen(true);
 
   const [employes, setEmployes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getDataEmployes = async () => {
+    setLoading(true);
     const data = await getEmployes();
     console.log("🚀 ~ file: Labour.jsx:22 ~ getDataEmployes ~ data:", data)
     setEmployes(data);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -50,9 +54,11 @@ function Labour() {
           getDataEmployes={getDataEmployes}
         />
       </Box>
+      {loading ? <LinearColor/> : null}
       <Divider/>
       <TablaCustom
         rows={employes}
+        getDataEmployes={getDataEmployes}
       />
     </>
   );

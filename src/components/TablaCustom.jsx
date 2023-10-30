@@ -8,8 +8,13 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableHead from "@mui/material/TableHead";
+import { IconButton } from "@mui/material";
 
-export default function TablaCustom({ rows }) {
+import DeleteIcon from '@mui/icons-material/Delete';
+// import api employes
+import { deletedEmploye } from "../api/api.employes";
+
+export default function TablaCustom({ rows, getDataEmployes }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -25,6 +30,15 @@ export default function TablaCustom({ rows }) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  // handle click buton delete employes
+  const handleClickDelete = async (id) => {
+    console.log('Eliminar!', id);
+    const rta = await deletedEmploye(id);
+    console.log("🚀 ~ file: TablaCustom.jsx:37 ~ handleClickDelete ~ rta:", rta);
+    if (rta.delete) {
+      getDataEmployes();
+    }
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -35,6 +49,7 @@ export default function TablaCustom({ rows }) {
             <TableCell sx={{ fontWeight: 'bold' }} align="right">Cargo</TableCell>
             <TableCell sx={{ fontWeight: 'bold' }} align="right">Sueldo</TableCell>
             <TableCell sx={{ fontWeight: 'bold' }} align="right">Fecha de Regsitro</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }} align="center">Borrar</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -54,6 +69,11 @@ export default function TablaCustom({ rows }) {
               </TableCell>
               <TableCell style={{ width: 180 }} align="right">
                 {row.date}
+              </TableCell>
+              <TableCell style={{ width: 140 }} align="center">
+                <IconButton onClick={() => handleClickDelete(row._id)}>
+                  <DeleteIcon/>
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
