@@ -164,7 +164,7 @@ export default function TableOperations({
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>Localizacion: </span>
+              <span style={{ fontWeight: "bold" }}>Localización: </span>
               {dataItem.location}
             </Item>
           </Grid>
@@ -176,14 +176,14 @@ export default function TableOperations({
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>vr/u: </span>
-              {dataItem.currentUnitCost.toFixed(2)}
+              <span style={{ fontWeight: "bold" }}>Proveedor: </span>
+              {dataItem.provider}
             </Item>
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>proveedor: </span>
-              {dataItem.provider}
+              <span style={{ fontWeight: "bold" }}>Telefono: </span>
+              {dataItem.phone}
             </Item>
           </Grid>
         </Grid>
@@ -202,13 +202,13 @@ export default function TableOperations({
               <TableCell sx={styledFontBold}>FECHA</TableCell>
               <TableCell sx={styledFontBold} align="right">DETALLE</TableCell>
               <TableCell sx={styledFontBold} align="right">CANTIDAD</TableCell>
-              <TableCell sx={styledFontBold} align="right">VR/U</TableCell>
+              <TableCell sx={styledFontBold} align="right">CU</TableCell>
               <TableCell sx={styledFontBold} align="right">TOTAL</TableCell>
               <TableCell sx={styledFontBold} align="right">CANTIDAD</TableCell>
-              <TableCell sx={styledFontBold} align="right">VR/U</TableCell>
+              <TableCell sx={styledFontBold} align="right">CU</TableCell>
               <TableCell sx={styledFontBold} align="right">TOTAL</TableCell>
               <TableCell sx={styledFontBold} align="right">CANTIDAD</TableCell>
-              <TableCell sx={styledFontBold} align="right">VR/U</TableCell>
+              <TableCell sx={styledFontBold} align="right">CU</TableCell>
               <TableCell sx={styledFontBold} align="right">TOTAL</TableCell>
             </TableRow>
           </TableHead>
@@ -228,16 +228,16 @@ export default function TableOperations({
                   {row.type === 1 ? row.record.amount : 0}
                 </TableCell>
                 <TableCell align="right">
-                  {row.type === 1 ? row.record.currentUnitCost : 0}
+                  {row.type === 1 ? row.record.currentUnitCost[0] : 0}
                 </TableCell>
                 <TableCell align="right">
-                  {row.type === 1 ? row.record.total : 0}
+                  {row.type === 1 ? row.record.total.toFixed(0) : 0}
                 </TableCell>
                 <TableCell align="right">
                   {row.type === 2 ? row.record.amount : 0}
                 </TableCell>
                 <TableCell align="right">
-                  {row.type === 2 ? row.record.currentUnitCost.toFixed(0) : 0}
+                  {row.type === 2 ? row.record.currentUnitCost.join(", ") : 0}
                 </TableCell>
                 <TableCell align="right">
                   {row.type === 2 ? row.record.total.toFixed(0) : 0}
@@ -246,7 +246,7 @@ export default function TableOperations({
                   {row.balances.amount}
                 </TableCell>
                 <TableCell align="right">
-                  {row.balances.currentUnitCost.toFixed(2)}
+                  {row.type === 1 ? row.balances.currentUnitCost[0].toFixed(2): "---" }
                 </TableCell>
                 <TableCell align="right">
                   {row.balances.total.toFixed(0)}

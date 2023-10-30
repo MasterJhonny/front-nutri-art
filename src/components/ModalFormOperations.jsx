@@ -5,12 +5,11 @@ import {
   Button,
   Typography,
   Modal,
-  TextField,
-  Grid
+  TextField
 } from "@mui/material";
 
 // import compomnet
-import ComboSelector from "../components/ComboSelector";
+import ComboSelectorEvent from "./ComboSelectorEvent";
 
 // import api request
 import { createdOperation } from "../api/api.operations.js";
@@ -20,7 +19,7 @@ const styleModal = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
+  width: 360,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -30,33 +29,51 @@ const styleInput = {
   margin: 1,
 };
 
-function ModalFormOperations({ open, setOpen, getDataOperations, id, updateData, setUpdateData }) {
+function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData }) {
 
   const handleClose = () => setOpen(false);
   const { control, handleSubmit, reset } = useForm();
   const onSubmit = async (data) => {
+    console.log("🚀 ~ file: ModalFormOperations.jsx:37 ~ onSubmit ~ data:", typeof data.currentUnitCost);
+    let record = {};
+    let newOperation = {};
     const recordAmount = parseInt(data.amount);
-    const recordCurrentUnitCost = parseInt(data.currentUnitCost);
+    if (typeof data.currentUnitCost === "string") {
+      console.log("Hay dato es compra!")
+      const recordCurrentUnitCost = parseFloat(data.currentUnitCost);
+      record = {
+          amount: recordAmount,
+          currentUnitCost: [recordCurrentUnitCost],
+          total: recordAmount * recordCurrentUnitCost
+      }
+      delete data.amount
+      delete data.currentUnitCost
+      newOperation = {
+          ...data,
+          type: 1,
+          record: record,
+          materialId: id
+      }
+    } else {
+      record = {
+        amount: recordAmount
+      }
+      delete data.amount
+      delete data.currentUnitCost
+        newOperation = {
+          ...data,
+          type: 2,
+          record: record,
+          materialId: id
+      }
+    }
 
-    const record = {
-        amount: recordAmount,
-        currentUnitCost: recordCurrentUnitCost,
-        total: recordAmount * recordCurrentUnitCost
-    }
-    delete data.amount
-    delete data.currentUnitCost
-    const newOperation = {
-        ...data,
-        record: record,
-        materialId: id
-    }
     console.log(newOperation);
     reset();
     handleClose();
     const rta = await createdOperation(newOperation);
     console.log("🚀 ~ file: ModalFormOperations.jsx:32 ~ onSubmit ~ rta:", rta);
     if (rta.create) {
-      // getDataOperations();
       setUpdateData(updateData + 1)
     }
   };
@@ -73,9 +90,8 @@ function ModalFormOperations({ open, setOpen, getDataOperations, id, updateData,
         </Typography>
         <br />
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={1}>
-            <Grid item xs={6}>
-              <Controller
+          <Box>
+          <Controller
                 name="date"
                 control={control}
                 render={({ field }) => (
@@ -102,17 +118,9 @@ function ModalFormOperations({ open, setOpen, getDataOperations, id, updateData,
                   />
                 )}
               />
-              <Controller
-                name="type"
+              <ComboSelectorEvent
                 control={control}
-                render={({ field }) => (
-                  <ComboSelector
-                  field={field}
-                  />
-                )}
               />
-            </Grid>
-            <Grid item xs={6}>
               <Controller
                 name="amount"
                 control={control}
@@ -127,26 +135,10 @@ function ModalFormOperations({ open, setOpen, getDataOperations, id, updateData,
                   />
                 )}
               />
-              <Controller
-                name="currentUnitCost"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    sx={styleInput}
-                    id="standard-basic"
-                    label="vr/u"
-                    type="number"
-                    required
-                    {...field}
-                  />
-                )}
-              />
-
               <Button sx={styleInput} type="sumbit" variant="contained">
                 Registrar
               </Button>
-            </Grid>
-          </Grid>
+          </Box>
         </form>
       </Box>
     </Modal>
