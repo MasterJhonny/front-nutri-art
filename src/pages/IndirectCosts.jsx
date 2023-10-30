@@ -1,35 +1,68 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link, Routes, Route } from "react-router-dom";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
+import { Box, Typography, Button, Divider } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
+// import component
+import TableIndirectCost from '../components/TableIndirectCost';
+import ModalFormInCosts from "../components/ModalFormInCosts";
+import LinearColor from "../components/LinearColor";
+
+// import api employes
+import { getInCosts } from "../api/api.incost";
 
 function IndirectCosts() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+
+  const [inCosts, setInCosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getDataInCosts = async () => {
+    setLoading(true);
+    const data = await getInCosts();
+    console.log("🚀 ~ file: Labour.jsx:22 ~ getDataInCosts ~ data:", data)
+    setInCosts(data);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getDataInCosts();
+  }, []);
+
   return (
     <>
-      <h1>Costos Indirectos de fabricacion</h1>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" to={""}>
-          Materia Prima
-        </Link>
-        <Link underline="hover" color="inherit" to={"faker"}>
-          Mano de Obra
-        </Link>
-        <Link
-          underline="hover"
-          color="text.primary"
-          to={"otro"}
-          aria-current="page"
+      <h2 className="App">Costos Indirectos de Fabricación</h2>
+      <Box
+        sx={{ height: 40, margin: 2 }}
+        display="flex"
+        justifyContent="space-between"
+      >
+        <Typography variant="h5">Lista de Costos Indirectos</Typography>
+        <Button
+          onClick={handleOpen}
+          variant="contained"
+          color='secondary'
+          startIcon={<AddIcon />}
         >
-          Costos Indirectos
-        </Link>
-      </Breadcrumbs>
-      <Routes>
-        <Route path="" element={<h3>Aqui ira el detalle de Materia Prima!</h3>} />
-        <Route path="faker" element={<h3>Aqui ira el detalle de Mano de Obra!</h3>} />
-        <Route path="otro" element={<h3>Aqui ira el detalle de Mano de Costos Indirectos!</h3>} />
-      </Routes>
+          Nuevo Registro
+        </Button>
+        <ModalFormInCosts
+          open={open}
+          setOpen={setOpen}
+          getDataInCosts={getDataInCosts}
+        />
+      </Box>
+      {loading ? <LinearColor/> : null}
+      <Divider/>
+      <TableIndirectCost
+        rows={inCosts}
+        getDataInCosts={getDataInCosts}
+      />
     </>
   );
 }
 
 export { IndirectCosts };
+

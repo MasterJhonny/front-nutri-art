@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import * as React from 'react';
+import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -25,6 +26,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 const listIcon = {
   'HomeIcon': HomeIcon,
@@ -40,7 +42,9 @@ function MakeIcon({nameIcon}) {
       {icon === 'HomeIcon' ? <HomeIcon/> : null }
       {icon === 'InventoryIcon' ? <InventoryIcon/> : null }
       {icon === 'PeopleIcon' ? <PeopleIcon/> : null }
-      {icon === 'MonetizationOnIcon' ? <MonetizationOnIcon/> : null }
+      {icon === 'MonetizationOnIcon' ? <MonetizationOnIcon/> : null } 
+      {icon === 'ListAltIcon' ? <ListAltIcon/> : null } 
+
     </>
   );
 }
@@ -54,8 +58,9 @@ import { IndirectCosts } from '../pages/IndirectCosts'
 import { Users } from '../pages/Users'
 import { NotFound } from '../pages/NotFound'
 import { User } from '../pages/User'
-import { Login } from '../pages/Login'
-import { useState } from 'react';
+import { Login } from '../pages/Login';
+import { ProductionCost } from '../pages/ProductionCost';
+
 
 const drawerWidth = 270;
 const auth = true;
@@ -74,10 +79,16 @@ const listItemModule = [
     name: 'Mano de Obra',
     path: '/labour',
     nameIcon: 'PeopleIcon'
-  },{
+  },
+  {
     name: 'Costos Indirectos',
     path: '/indirectCosts',
     nameIcon: 'MonetizationOnIcon'
+  },
+  {
+    name: 'Costos de Producción',
+    path: '/productionCost',
+    nameIcon: 'ListAltIcon'
   }
 ];
 
@@ -251,6 +262,7 @@ export default function MiniDrawer() {
           <Route path="/" element={auth ? <Home/> : <Navigate to='/login'/>}/>
           <Route path="/labour/*" element={<Labour/>}/>
           <Route path="/indirectCosts/*" element={<IndirectCosts/>}/>
+          <Route path="/productionCost/*" element={<ProductionCost/>}/>
           
           <Route path="/inventory/*" element={<InventoryMaterial/>}>
             <Route path="welcome" element={<h3>Welcome !!</h3>}/>
