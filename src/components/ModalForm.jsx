@@ -172,6 +172,20 @@ function ModalForm({ open, setOpen, setMaterial }) {
                   />
                 )}
               />
+              <Controller
+                name="lotSize"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    sx={styleInput}
+                    id="standard-basic"
+                    label="Tamaño del Lote"
+                    type="number"
+                    required
+                    {...field}
+                  />
+                )}
+              />
               <Button sx={styleInput} type="sumbit" variant="contained">
                 Registrar
               </Button>

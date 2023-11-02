@@ -186,6 +186,18 @@ export default function TableOperations({
               {dataItem.phone}
             </Item>
           </Grid>
+          <Grid item xs={3}>
+            <Item>
+              <span style={{ fontWeight: "bold" }}>Tamaño de lote: </span>
+              {dataItem.lotSize}
+            </Item>
+          </Grid>
+          <Grid item xs={3}>
+            <Item>
+              <span style={{ fontWeight: "bold" }}>Cantidad ocupada de lote: </span>
+              {dataItem.quantityLot}
+            </Item>
+          </Grid>
         </Grid>
       </Box>
       {loading ? <LinearColor/> : null}
