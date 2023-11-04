@@ -29,7 +29,7 @@ const styleInput = {
   margin: 1,
 };
 
-function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData }) {
+function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData, dataItem, setLoading }) {
 
   const handleClose = () => setOpen(false);
   const { control, handleSubmit, reset } = useForm();
@@ -39,7 +39,7 @@ function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData }) {
     let newOperation = {};
     const recordAmount = parseInt(data.amount);
     if (typeof data.currentUnitCost === "string") {
-      console.log("Hay dato es compra!")
+      console.log("Hay dato es compra!");
       const recordCurrentUnitCost = parseFloat(data.currentUnitCost);
       record = {
           amount: recordAmount,
@@ -55,6 +55,12 @@ function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData }) {
           materialId: id
       }
     } else {
+      console.log("Es venta!", data.amount);
+      const diferentLot = dataItem.lotSize - dataItem.quantityLot;
+      if (data.amount > diferentLot) {
+        alert(`La cantidad de SALIDA debe ser menor o igual a ${diferentLot}`);
+        return 0;
+      }
       record = {
         amount: recordAmount
       }
@@ -67,10 +73,9 @@ function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData }) {
           materialId: id
       }
     }
-
-    console.log(newOperation);
     reset();
     handleClose();
+    setLoading(true);
     const rta = await createdOperation(newOperation);
     console.log("🚀 ~ file: ModalFormOperations.jsx:32 ~ onSubmit ~ rta:", rta);
     if (rta.create) {

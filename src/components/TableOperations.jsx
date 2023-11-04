@@ -51,6 +51,9 @@ export default function TableOperations({
 }) {
   const [openAlert, setOpenAlert] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  // get data handle
+  const [rows, setRows] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   const handleClickOpenAlert = () => {
     setOpenAlert(true);
@@ -61,7 +64,7 @@ export default function TableOperations({
   };
 
   // logica tabla
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -75,10 +78,6 @@ export default function TableOperations({
     setPage(0);
   };
 
-  const [loading, setLoading] = React.useState(false);
-
-  // get data handle
-  const [rows, setRows] = React.useState([]);
   const getDataOperations = async () => {
     setLoading(true);
     const operations = await getOperationsByMaterialId(dataItem._id);
@@ -118,6 +117,8 @@ export default function TableOperations({
               getDataOperations={getDataOperations}
               updateData={updateData}
               setUpdateData={setUpdateData}
+              dataItem={dataItem}
+              setLoading={setLoading}
             />
             <Button
               variant="outlined"
