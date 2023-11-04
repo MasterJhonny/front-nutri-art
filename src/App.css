@@ -13,15 +13,34 @@
   width: 200px;
 }
 
+.item_menu {
+  padding: 0px;
+}
+
+.item_active {
+  color: #292119;
+  padding: 0px;
+}
+
 .active {
   color: #292119;
-  font-weight: bold;
+  font-weight: 500;
   transition: all 1s;
+  background-color: #facc3c;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+ul > a:hover {
+  background-color: #767575;
+  color: #292119;
 }
 
 a {
   text-decoration: none;
   color: #767575;
+  font-weight: 500;
+  padding: 4px;
   /*background-color: #FAD9E6;
   padding: 4px 10px;
   border-radius: 5px;*/

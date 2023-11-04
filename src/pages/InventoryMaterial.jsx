@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Routes, Route } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 import {
   Breadcrumbs,
   Box,
@@ -66,7 +66,7 @@ function InventoryMaterial() {
             material === null ? 
             <p>Cargando...</p> :
             material.map(item=> (
-                <Link key={item._id} underline="hover" to={item.path}>{item.article}</Link>
+                <NavLink key={item._id} underline="hover" to={item.path}>{item.article}</NavLink>
             ))
         }
       </Breadcrumbs>

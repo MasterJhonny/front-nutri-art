@@ -1,6 +1,5 @@
-import { NavLink } from 'react-router-dom';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -28,13 +27,6 @@ import PeopleIcon from '@mui/icons-material/People';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
-const listIcon = {
-  'HomeIcon': HomeIcon,
-  'InventoryIcon': InventoryIcon,
-  'PeopleIcon': PeopleIcon,
-  'MonetizationOnIcon': MonetizationOnIcon
-}
-
 function MakeIcon({nameIcon}) {
   const [icon, setIcon] = useState(nameIcon);
   return (
@@ -60,6 +52,8 @@ import { NotFound } from '../pages/NotFound'
 import { User } from '../pages/User'
 import { Login } from '../pages/Login';
 import { ProductionCost } from '../pages/ProductionCost';
+// import components
+import LinkCustom from "./LinkCustom";
 
 
 const drawerWidth = 270;
@@ -68,27 +62,32 @@ const listItemModule = [
   {
     name: 'Inicio',
     path: '/',
-    nameIcon: 'HomeIcon'
+    nameIcon: 'HomeIcon',
+    active: false
   },
   {
     name: 'Invetarios de Materiales',
     path: '/inventory',
-    nameIcon: 'InventoryIcon'
+    nameIcon: 'InventoryIcon',
+    active: false
   },
   {
     name: 'Mano de Obra',
     path: '/labour',
-    nameIcon: 'PeopleIcon'
+    nameIcon: 'PeopleIcon',
+    active: false
   },
   {
     name: 'Costos Indirectos',
     path: '/indirectCosts',
-    nameIcon: 'MonetizationOnIcon'
+    nameIcon: 'MonetizationOnIcon',
+    active: false
   },
   {
     name: 'Costos de Producción',
     path: '/productionCost',
-    nameIcon: 'ListAltIcon'
+    nameIcon: 'ListAltIcon',
+    active: false
   }
 ];
 
@@ -160,6 +159,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [list, setList] = useState(listItemModule);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -199,17 +199,21 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {listItemModule.map((item, index) => (
-            
-              <NavLink to={item.path} key={item.name} style={{ width: open ? 170 : 0}}>
-                
+          {list.map((item, index) => (
+              <LinkCustom
+                item={item}
+                key={item.name}
+                index={index}
+                open={open}
+                list={list}
+                setList={setList}
+              >
                 <ListItemButton
-                  
                   sx={{
-                    background: 'none',
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    backgroundColor: item.active ? '#facc3c': '#ffff'
                   }}
                 >
                   <ListItemIcon
@@ -223,8 +227,7 @@ export default function MiniDrawer() {
                   </ListItemIcon>
                   <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
-              </NavLink>
-            
+              </LinkCustom>
           ))}
         </List>
         <Divider />
