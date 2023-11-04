@@ -40,6 +40,11 @@ function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData, dat
     const recordAmount = parseInt(data.amount);
     if (typeof data.currentUnitCost === "string") {
       console.log("Hay dato es compra!");
+      const totalAcumulateStock = dataItem.stock + recordAmount;
+      if (totalAcumulateStock < dataItem.countMin || totalAcumulateStock > dataItem.countMax) {
+        alert(`El SALDO FINAL de existencias debe estar en el rango de ${dataItem.countMin} a ${dataItem.countMax}`);
+        return 0;
+      }
       const recordCurrentUnitCost = parseFloat(data.currentUnitCost);
       record = {
           amount: recordAmount,
@@ -57,8 +62,12 @@ function ModalFormOperations({ open, setOpen, id, updateData, setUpdateData, dat
     } else {
       console.log("Es venta!", data.amount);
       const diferentLot = dataItem.lotSize - dataItem.quantityLot;
-      if (data.amount > diferentLot) {
-        alert(`La cantidad de SALIDA debe ser menor o igual a ${diferentLot}`);
+      if (recordAmount > diferentLot) {
+        alert(`La cantidad de SALIDA debe ser menor o igual a ${diferentLot}, que es el tamaño del lote!`);
+        return 0;
+      }
+      if (recordAmount > dataItem.stock) {
+        alert(`La cantidad de SALIDA debe ser menor o igual a las Existencias: ${dataItem.stock}`);
         return 0;
       }
       record = {
