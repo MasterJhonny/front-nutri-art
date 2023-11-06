@@ -5,7 +5,7 @@ import { Box, Typography, Button, Divider } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 // import component
-import TablaCustom from '../components/TablaCustom';
+import TablaEmployes from '../components/TablaEmployes';
 import ModalFormEmployes from "../components/ModalFormEmployes";
 import LinearColor from "../components/LinearColor";
 
@@ -56,7 +56,7 @@ function Labour() {
       </Box>
       {loading ? <LinearColor/> : null}
       <Divider/>
-      <TablaCustom
+      <TablaEmployes
         rows={employes}
         getDataEmployes={getDataEmployes}
       />
