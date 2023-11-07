@@ -199,6 +199,12 @@ export default function TableOperations({
               {dataItem.quantityLot}
             </Item>
           </Grid>
+          <Grid item xs={3}>
+            <Item>
+              <span style={{ fontWeight: "bold" }}>Numero de lote: </span>
+              {dataItem.numberLot}
+            </Item>
+          </Grid>
         </Grid>
       </Box>
       {loading ? <LinearColor/> : null}
