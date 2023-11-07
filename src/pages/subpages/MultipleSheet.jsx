@@ -2,6 +2,8 @@ import React from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 
+import TablaCustom from "../../components/TablaCustom";
+
 const MultipleSheet = ({ nameSubPage, listTables = [] }) => {
   return (
     <>
@@ -18,7 +20,7 @@ const MultipleSheet = ({ nameSubPage, listTables = [] }) => {
           <Route
             key={table.name}
             path={table.path}
-            element={<h3>{table.name}</h3>}
+            element={<TablaCustom url={table.url} list={table.list} />}
           />
         ))}
       </Routes>

@@ -5,24 +5,112 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 // import components
 import MultipleSheet from "./subpages/MultipleSheet";
+import { config } from "../config.js";
+
+const API_BASE = config.API_URL;
 
 // data for multiple Sheets 
 const listCosts = [
   {
     name: 'MATERIALES DIRECTOS',
     path: 'directMaterial',
+    url: `${API_BASE}/lotes/set-lotes-number/1`,
+    list: [
+      {
+        head: 'FECHA',
+        property: 'created_at',
+        align: 'left',
+      },
+      {
+        head: 'DETALLE',
+        property: 'detail',
+        align: 'left',
+      },
+      {
+        head: 'CANTIDAD',
+        property: 'count',
+        align: 'right',
+      },
+      {
+        head: 'MEDIDA',
+        property: 'measure',
+        align: 'right',
+      },
+      {
+        head: 'COSTO',
+        property: 'costs',
+        align: 'right',
+      },
+      {
+        head: 'IMPORTE',
+        property: 'import',
+        align: 'right',
+      }
+    ] 
   },
   {
     name: 'COSTO DE MANO DE OBRA',
     path: 'workforceCost',
+    url: `${API_BASE}/employes`,
+    list: [
+      {
+        head: 'FECHA',
+        property: 'created_at',
+        align: 'left',
+      },
+      {
+        head: 'DETALLE',
+        property: 'fullName',
+        align: 'left',
+      },
+      {
+        head: 'HORAS',
+        property: 'hours',
+        align: 'right',
+      },
+      {
+        head: 'COSTO',
+        property: 'costs',
+        align: 'right',
+      },
+      {
+        head: 'IMPORTE',
+        property: 'import',
+        align: 'right',
+      }
+    ] 
   },
   {
     name: 'COSTOS INDIRECTOS DE FABRICACIÓN',
     path: 'manufacturingCosts',
+    url: `${API_BASE}/incost`,
+    list: [
+      {
+        head: 'FECHA',
+        property: 'created_at',
+        align: 'left',
+      },
+      {
+        head: 'DETALLE',
+        property: 'detail',
+        align: 'left',
+      },
+      {
+        head: 'COSTO POR LITRO',
+        property: 'amountForLiter',
+        align: 'right',
+      },
+      {
+        head: 'IMPORTE',
+        property: 'import',
+        align: 'right',
+      }
+    ] 
   },
   {
     name: 'COSTO DE PRODUCCIÓN',
     path: 'prodCosts',
+    // url: `${API_BASE}/lotes/set-lotes-number/1`,
   },
 ];
 
