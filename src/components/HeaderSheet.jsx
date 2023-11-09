@@ -1,7 +1,6 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Chip } from "@mui/material";
-
 import { registerSummaryOperation } from "../api/api.summaries.js";
 
 const styledChip = {
@@ -9,13 +8,22 @@ const styledChip = {
   fontWeight: "bold",
 };
 
-const HeaderSheet = ({ title, isTableMaterial, dataLot }) => {
+const HeaderSheet = ({ title, isTableMaterial, dataLot, setLoading }) => {
+
+  const [loadingButton, setLoadingButton] = useState(false);
+
+  const navigate = useNavigate();
+
   const handleClick = async () => {
-    console.log("registar! la entrada en el kardex de PT", dataLot);
     const confirmValue = confirm(`Se llevara el Lote: ${dataLot.numberLot} al almacén!`);
     if (confirmValue) {
+      setLoadingButton(true);
+      setLoading(true);
       const rta = await registerSummaryOperation(dataLot);
       console.log("🚀 ~ file: HeaderSheet.jsx:16 ~ handleClick ~ rta:", rta);
+      if (rta.create) {
+        navigate('/productionCost');
+      }
     }
   };
 
@@ -40,9 +48,10 @@ const HeaderSheet = ({ title, isTableMaterial, dataLot }) => {
               color="secondary"
               variant="contained"
               sx={{ marginLeft: 2 }}
+              disabled={loadingButton}
               onClick={handleClick}
             >
-              pasar a Almacen
+              {loadingButton ? 'Cargando...' : 'pasar a Almacen'}
             </Button>
           </div>
         ) : (

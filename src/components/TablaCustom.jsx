@@ -59,6 +59,9 @@ export default function TablaCustom({ url, list = [], isTableMaterial = false, t
 
   React.useEffect(() => {
     getDataForTable();
+    return () => {
+      setLoading(false);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -67,7 +70,7 @@ export default function TablaCustom({ url, list = [], isTableMaterial = false, t
 
   return (
     <>
-      <HeaderSheet title={title} isTableMaterial={isTableMaterial} dataLot={dataLot}/>
+      <HeaderSheet title={title} isTableMaterial={isTableMaterial} dataLot={dataLot} setLoading={setLoading}/>
       <Divider sx={{ marginTop: 1 }} />
       {loading ? <LinearColor /> : null}
       <TableContainer component={Paper}>

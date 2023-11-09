@@ -165,14 +165,14 @@ export default function TableOperations({
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>Localización: </span>
-              {dataItem.location}
+              <span style={{ fontWeight: "bold" }}>Existencias: </span>
+              {dataItem.stock.toFixed(0)}
             </Item>
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>Existencias: </span>
-              {dataItem.stock.toFixed(0)}
+              <span style={{ fontWeight: "bold" }}>Numero de lote: </span>
+              {dataItem.numberLot}
             </Item>
           </Grid>
           <Grid item xs={3}>
@@ -201,8 +201,8 @@ export default function TableOperations({
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>Numero de lote: </span>
-              {dataItem.numberLot}
+              <span style={{ fontWeight: "bold" }}>Localización: </span>
+              {dataItem.location}
             </Item>
           </Grid>
         </Grid>
