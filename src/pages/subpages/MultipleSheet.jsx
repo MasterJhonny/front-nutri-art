@@ -2,39 +2,52 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import TablaCustom from "../../components/TablaCustom";
+import BasicTable from "../../components/BasicTable";
 
 // import api
 import { getSummariesLots } from "../../api/api.lotes.js";
+import { getSummariesCost } from "../../api/api.summaries.js";
 
 const MultipleLots = ({ listLots = [], url, list, title }) => {
+
+  const identifyNumberLot = (lot) => {
+    return lot.numberLot
+      ? lot.numberLot.toString()
+      : lot.numberLotSet.toString();
+  };
+
   return (
     <>
       <h3>Costo por Lotes</h3>
       <Breadcrumbs aria-label="breadcrumb">
         {listLots.map((lot) => (
           <NavLink
-            key={lot.numberLot}
+            key={identifyNumberLot(lot)}
             underline="active"
-            to={lot.numberLot.toString()}
+            to={identifyNumberLot(lot)}
           >
-            Lote {lot.numberLot}
+            Lote {identifyNumberLot(lot)}
           </NavLink>
         ))}
       </Breadcrumbs>
       <Routes>
         {listLots.map((lot) => (
           <Route
-            key={lot.numberLot}
-            path={lot.numberLot.toString()}
+            key={identifyNumberLot(lot)}
+            path={identifyNumberLot(lot)}
             element={
-              <TablaCustom
-                url={`${url}/${lot.numberLot}`}
-                list={list}
-                isTableMaterial={true}
-                title={title}
-                dataLot={lot}
-                isCompletedLot={lot.isCompletedSetLot}
-              />
+              title === "MATERIALES DIRECTOS" ? (
+                <TablaCustom
+                  url={`${url}/${lot.numberLot}`}
+                  list={list}
+                  isTableMaterial={true}
+                  title={title}
+                  dataLot={lot}
+                  isCompletedLot={lot.isCompletedSetLot}
+                />
+              ) : (
+                <BasicTable summaryCost={lot}/>
+              )
             }
           />
         ))}
@@ -45,14 +58,19 @@ const MultipleLots = ({ listLots = [], url, list, title }) => {
 
 const MultipleSheet = ({ nameSubPage, listTables = [] }) => {
   const [summariesLotes, setSummariesLotes] = useState([]);
+  const [summaryCost, setSummaryCost] = useState([]);
 
-  const getDataSummary = async () => {
-    const data = await getSummariesLots();
-    setSummariesLotes(data);
+  const getData = async () => {
+    const response = await Promise.all([
+      getSummariesLots(),
+      getSummariesCost(),
+    ]);
+    setSummariesLotes(response[0]);
+    setSummaryCost(response[1]);
   };
 
   useEffect(() => {
-    getDataSummary();
+    getData();
   }, []);
   return (
     <>
@@ -69,14 +87,17 @@ const MultipleSheet = ({ nameSubPage, listTables = [] }) => {
           <Route
             key={table.name}
             path={
-              table.name === "MATERIALES DIRECTOS"
+              table.name === "MATERIALES DIRECTOS" || table.path === "prodCosts"
                 ? `${table.path}/*`
                 : table.path
             }
             element={
-              table.name === "MATERIALES DIRECTOS" ? (
+              table.name === "MATERIALES DIRECTOS" ||
+              table.path === "prodCosts" ? (
                 <MultipleLots
-                  listLots={summariesLotes}
+                  listLots={
+                    table.path === "prodCosts" ? summaryCost : summariesLotes
+                  }
                   path={table.path}
                   url={table.url}
                   list={table.list}

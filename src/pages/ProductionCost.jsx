@@ -110,7 +110,6 @@ const listCosts = [
   {
     name: 'COSTO DE PRODUCCIÓN',
     path: 'prodCosts',
-    // url: `${API_BASE}/lotes/set-lotes-number/1`,
   },
 ];
 
