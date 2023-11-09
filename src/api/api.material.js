@@ -13,10 +13,6 @@ export const getMaterial = async () => {
         path: makePathForRouter(item.article),
       };
     });
-    console.log(
-      "🚀 ~ file: api.material.js:14 ~ customData ~ customData:",
-      customData
-    );
     return customData;
   } catch (error) {
     console.error("Ups! Error!", error);

@@ -8,12 +8,15 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableHead from "@mui/material/TableHead";
+import Divider from "@mui/material/Divider";
+
 import { IconButton } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearColor from "../components/LinearColor";
+import HeaderSheet from "../components/HeaderSheet";
 // import api employes
-import { getData } from "../api/api.general.js";
+import { getData } from "../api/api.lotes.js";
 import { buildDataTable, buildTotalImport } from "../func";
 
 // styed headRows
@@ -22,8 +25,7 @@ const styedHead = {
   color: "#272829",
 };
 
-export default function TablaCustom({ url, list = [] }) {
-
+export default function TablaCustom({ url, list = [], isTableMaterial = false, title, dataLot }) {
   const [rows, setRows] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(0);
@@ -48,10 +50,6 @@ export default function TablaCustom({ url, list = [] }) {
       setLoading(true);
       const data = await getData(url);
       const newRows = buildDataTable(data);
-      console.log(
-        "🚀 ~ file: TablaCustom.jsx:38 ~ aqui-------------------> ~ newRows:",
-        newRows
-      );
       const importTotal = buildTotalImport(newRows);
       setRows(newRows);
       setTotal(importTotal);
@@ -69,13 +67,15 @@ export default function TablaCustom({ url, list = [] }) {
 
   return (
     <>
+      <HeaderSheet title={title} isTableMaterial={isTableMaterial} dataLot={dataLot}/>
+      <Divider sx={{ marginTop: 1 }} />
       {loading ? <LinearColor /> : null}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>
               {list.map((item) => (
-                <TableCell sx={styedHead} align={item.align}>
+                <TableCell key={item.head} sx={styedHead} align={item.align}>
                   {item.head}
                 </TableCell>
               ))}
@@ -88,20 +88,31 @@ export default function TablaCustom({ url, list = [] }) {
             ).map((row) => (
               <TableRow key={row._id}>
                 {list.map((record) => (
-                  <TableCell style={{ width: 180 }} align={record.align}>
+                  <TableCell key={record.property} style={{ width: 180 }} align={record.align}>
                     {row[record.property]}
                   </TableCell>
                 ))}
               </TableRow>
             ))}
-            <TableRow key='total'>
+            <TableRow key='total-mes'>
               <TableCell colSpan={list.length - 1} sx={styedHead} align='right'>
-                {"TOTAL"}
+                {isTableMaterial ? "TOTAL POR LOTE" : "TOTAL MESUAL"}
               </TableCell>
               <TableCell sx={styedHead} align='right'>
                 {total}
               </TableCell>
             </TableRow>
+            {
+              isTableMaterial ? null :
+              <TableRow key='total-lote'>
+                <TableCell colSpan={list.length - 1} sx={styedHead} align='right'>
+                  {"TOTAL POR LOTE"}
+                </TableCell>
+                <TableCell sx={styedHead} align='right'>
+                  {(total/3).toFixed(2)}
+                </TableCell>
+              </TableRow>
+            }
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />

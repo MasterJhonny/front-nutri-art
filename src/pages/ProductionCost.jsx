@@ -14,7 +14,7 @@ const listCosts = [
   {
     name: 'MATERIALES DIRECTOS',
     path: 'directMaterial',
-    url: `${API_BASE}/lotes/set-lotes-number/1`,
+    url: `${API_BASE}/lotes/set-lotes-number`,
     list: [
       {
         head: 'FECHA',
