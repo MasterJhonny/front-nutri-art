@@ -5,6 +5,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 // import components
 import MultipleSheet from "./subpages/MultipleSheet";
+import TableFinishedProducts from "../components/TableFinishedProducts";
 import { config } from "../config.js";
 
 const API_BASE = config.API_URL;
@@ -113,6 +114,16 @@ const listCosts = [
   },
 ];
 
+const dataProduct = {
+  _id: "finishedProduct",
+  article: "YOGURT DE CHILTO",
+  code: "00-001",
+  unitMeasure: "unidades",
+  countMin: 90,
+  location: "almacen",
+  stock: 0,
+}
+
 function ProductionCost() {
   return (
     <>
@@ -124,19 +135,10 @@ function ProductionCost() {
         <NavLink underline="hover" color="inherit" to={"productInventory"}>
           Inventario de Productos Terminados
         </NavLink>
-        <NavLink
-          underline="hover"
-          color="text.primary"
-          to={"oper"}
-          aria-current="page"
-        >
-          Operaciones
-        </NavLink>
       </Breadcrumbs>
       <Routes>
         <Route path="costSheet/*" element={<MultipleSheet nameSubPage={"Hoja de Costos"} listTables={listCosts}/>} />
-        <Route path="productInventory/*" element={<MultipleSheet nameSubPage={"Inventario de Productos Terminados"}/>} />
-        <Route path="oper/*" element={<MultipleSheet nameSubPage={"Operaciones"}/>} />
+        <Route path="productInventory/*" element={<TableFinishedProducts dataItem={dataProduct}/>} />
       </Routes>
     </>
   );

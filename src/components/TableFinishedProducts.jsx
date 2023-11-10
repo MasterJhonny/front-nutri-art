@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Box,
@@ -15,19 +15,17 @@ import {
   TableHead,
   TableRow,
   TableFooter,
-  TablePagination
+  TablePagination,
 } from "@mui/material";
-// import { DataGrid } from "@mui/x-data-grid"; unistall
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 
 // import components
-import AlertDialogSlide from "../components/AlertDialogSlide";
-import ModalFormOperations from "../components/ModalFormOperations";
-import LinearColor from '../components/LinearColor';
+import ModalFormSales from "./ModalFormSales.jsx";
+import LinearColor from "./LinearColor.jsx";
 
 // import api get operaciones
-import { getOperationsByMaterialId } from "../api/api.operations.js"
+import { getOperationsByMaterialId } from "../api/api.operations.js";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -41,31 +39,23 @@ const Item = styled(Paper)(({ theme }) => ({
 // styled
 const styledFontBold = {
   fontWeight: "bold",
-  color: '#4f4f4f'
-}
+  color: "#4f4f4f",
+};
 
-export default function TableOperations({
-  dataItem,
-  updateData,
-  setUpdateData,
-}) {
-  const [openAlert, setOpenAlert] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+export default function TableFinishedProducts({ dataItem }) {
+  const [open, setOpen] = useState(false);
   // get data handle
-  const [rows, setRows] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-
-  const handleClickOpenAlert = () => {
-    setOpenAlert(true);
-  };
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [stock, setStock] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   // logica tabla
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -81,11 +71,14 @@ export default function TableOperations({
   const getDataOperations = async () => {
     setLoading(true);
     const operations = await getOperationsByMaterialId(dataItem._id);
+    if (operations.length > 0) {
+      setStock(operations[operations.length - 1].balances.amount);
+    }
     setRows(operations);
     setLoading(false);
-  }
+  };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getDataOperations();
   }, [dataItem]);
 
@@ -107,33 +100,16 @@ export default function TableOperations({
               color="secondary"
               onClick={handleClickOpen}
             >
-              Agregar Operaciones
+              Agregar Salida de Productos
             </Button>
-            <ModalFormOperations
+            <ModalFormSales
               open={open}
               setOpen={setOpen}
               id={dataItem._id}
               getDataOperations={getDataOperations}
-              updateData={updateData}
-              setUpdateData={setUpdateData}
               dataItem={dataItem}
               setLoading={setLoading}
-            />
-            <Button
-              variant="outlined"
-              startIcon={<DeleteIcon />}
-              color="error"
-              onClick={handleClickOpenAlert}
-            >
-              Eliminar Material
-            </Button>
-            <AlertDialogSlide
-              open={openAlert}
-              setOpen={setOpenAlert}
-              id={dataItem._id}
-              nameMaterial={dataItem.article}
-              updateData={updateData}
-              setUpdateData={setUpdateData}
+              stock={stock}
             />
           </Box>
         </Box>
@@ -158,44 +134,8 @@ export default function TableOperations({
           </Grid>
           <Grid item xs={3}>
             <Item>
-              <span style={{ fontWeight: "bold" }}>Cantidad Maxima: </span>
-              {dataItem.countMax}
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item>
               <span style={{ fontWeight: "bold" }}>Existencias: </span>
-              {dataItem.stock.toFixed(0)}
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item>
-              <span style={{ fontWeight: "bold" }}>Numero de lote: </span>
-              {dataItem.numberLot}
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item>
-              <span style={{ fontWeight: "bold" }}>Proveedor: </span>
-              {dataItem.provider}
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item>
-              <span style={{ fontWeight: "bold" }}>Telefono: </span>
-              {dataItem.phone}
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item>
-              <span style={{ fontWeight: "bold" }}>Tamaño de lote: </span>
-              {dataItem.lotSize}
-            </Item>
-          </Grid>
-          <Grid item xs={3}>
-            <Item>
-              <span style={{ fontWeight: "bold" }}>Cantidad ocupada de lote: </span>
-              {dataItem.quantityLot}
+              {stock}
             </Item>
           </Grid>
           <Grid item xs={3}>
@@ -206,28 +146,54 @@ export default function TableOperations({
           </Grid>
         </Grid>
       </Box>
-      {loading ? <LinearColor/> : null}
+      {loading ? <LinearColor /> : null}
       <TableContainer component={Paper} sx={{ border: "1px solid #DFD8C8" }}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>
-              <TableCell colSpan={2} >{dataItem.article}</TableCell>
-              <TableCell colSpan={3} sx={styledFontBold} align="center">ENTRADAS</TableCell>
-              <TableCell colSpan={3} sx={styledFontBold} align="center">SALIDAS</TableCell>
-              <TableCell colSpan={3} sx={styledFontBold} align="center">SALDOS</TableCell>
+              <TableCell colSpan={2}>{dataItem.article}</TableCell>
+              <TableCell colSpan={3} sx={styledFontBold} align="center">
+                ENTRADAS
+              </TableCell>
+              <TableCell colSpan={3} sx={styledFontBold} align="center">
+                SALIDAS
+              </TableCell>
+              <TableCell colSpan={3} sx={styledFontBold} align="center">
+                SALDOS
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={styledFontBold}>FECHA</TableCell>
-              <TableCell sx={styledFontBold} align="right">DETALLE</TableCell>
-              <TableCell sx={styledFontBold} align="right">CANTIDAD</TableCell>
-              <TableCell sx={styledFontBold} align="right">CU</TableCell>
-              <TableCell sx={styledFontBold} align="right">TOTAL</TableCell>
-              <TableCell sx={styledFontBold} align="right">CANTIDAD</TableCell>
-              <TableCell sx={styledFontBold} align="right">CU</TableCell>
-              <TableCell sx={styledFontBold} align="right">TOTAL</TableCell>
-              <TableCell sx={styledFontBold} align="right">CANTIDAD</TableCell>
-              <TableCell sx={styledFontBold} align="right">CU</TableCell>
-              <TableCell sx={styledFontBold} align="right">TOTAL</TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                DETALLE
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                CANTIDAD
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                CU
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                TOTAL
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                CANTIDAD
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                CU
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                TOTAL
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                CANTIDAD
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                CU
+              </TableCell>
+              <TableCell sx={styledFontBold} align="right">
+                TOTAL
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -239,14 +205,14 @@ export default function TableOperations({
                 <TableCell component="th" scope="row">
                   {row.date}
                 </TableCell>
-                <TableCell align="right">
-                  {row.detail}
-                </TableCell>
+                <TableCell align="right">{row.detail}</TableCell>
                 <TableCell align="right">
                   {row.type === 1 ? row.record.amount : 0}
                 </TableCell>
                 <TableCell align="right">
-                  {row.type === 1 ? row.record.currentUnitCost[0] : 0}
+                  {row.type === 1
+                    ? row.record.currentUnitCost[0].toFixed(2)
+                    : 0}
                 </TableCell>
                 <TableCell align="right">
                   {row.type === 1 ? row.record.total.toFixed(0) : 0}
@@ -255,16 +221,16 @@ export default function TableOperations({
                   {row.type === 2 ? row.record.amount : 0}
                 </TableCell>
                 <TableCell align="right">
-                  {row.type === 2 ? row.record.currentUnitCost.map(item=> item.cost).join(', ') : 0}
+                  {row.type === 2 ? row.record.currentUnitCost.map(item=> item.cost.toFixed(2)).join(', ') : 0}
                 </TableCell>
                 <TableCell align="right">
                   {row.type === 2 ? row.record.total.toFixed(0) : 0}
                 </TableCell>
+                <TableCell align="right">{row.balances.amount}</TableCell>
                 <TableCell align="right">
-                  {row.balances.amount}
-                </TableCell>
-                <TableCell align="right">
-                  {row.type === 1 ? row.balances.currentUnitCost[0].toFixed(2): "---" }
+                  {row.type === 1
+                    ? row.balances.currentUnitCost[0].toFixed(2)
+                    : "---"}
                 </TableCell>
                 <TableCell align="right">
                   {row.balances.total.toFixed(0)}

@@ -102,7 +102,7 @@ export default function TablaCustom({ url, list = [], isTableMaterial = false, t
                 {isTableMaterial ? "TOTAL POR LOTE" : "TOTAL MESUAL"}
               </TableCell>
               <TableCell sx={styedHead} align='right'>
-                {total}
+                {total.toFixed(2)}
               </TableCell>
             </TableRow>
             {

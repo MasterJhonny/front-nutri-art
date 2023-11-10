@@ -20,7 +20,8 @@ export const buildDataTable = (data) => {
         if (item.import) {
             newItem = {
                 ...newItem,
-                import: parseFloat(item.import.toFixed(2))
+                import: parseFloat(item.import.toFixed(2)),
+                costs: item.costs.map(item=> item.cost).join(', ')
             }
         } 
         if (item.salary) {

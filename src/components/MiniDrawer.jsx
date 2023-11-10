@@ -26,6 +26,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import PeopleIcon from '@mui/icons-material/People';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
 function MakeIcon({nameIcon}) {
   const [icon, setIcon] = useState(nameIcon);
@@ -35,8 +36,8 @@ function MakeIcon({nameIcon}) {
       {icon === 'InventoryIcon' ? <InventoryIcon/> : null }
       {icon === 'PeopleIcon' ? <PeopleIcon/> : null }
       {icon === 'MonetizationOnIcon' ? <MonetizationOnIcon/> : null } 
-      {icon === 'ListAltIcon' ? <ListAltIcon/> : null } 
-
+      {icon === 'ListAltIcon' ? <ListAltIcon/> : null }
+      {icon === 'TextSnippetIcon' ? <TextSnippetIcon/> : null }
     </>
   );
 }
@@ -52,6 +53,7 @@ import { NotFound } from '../pages/NotFound'
 import { User } from '../pages/User'
 import { Login } from '../pages/Login';
 import { ProductionCost } from '../pages/ProductionCost';
+import { Sales } from "../pages/Sales";
 // import components
 import LinkCustom from "./LinkCustom";
 
@@ -87,6 +89,12 @@ const listItemModule = [
     name: 'Costos de Producción',
     path: '/productionCost',
     nameIcon: 'ListAltIcon',
+    active: false
+  },
+  {
+    name: 'Registro de Ventas',
+    path: '/salesRecord',
+    nameIcon: 'TextSnippetIcon',
     active: false
   }
 ];
@@ -266,16 +274,11 @@ export default function MiniDrawer() {
           <Route path="/labour/*" element={<Labour/>}/>
           <Route path="/indirectCosts/*" element={<IndirectCosts/>}/>
           <Route path="/productionCost/*" element={<ProductionCost/>}/>
-          
-          <Route path="/inventory/*" element={<InventoryMaterial/>}>
-            <Route path="welcome" element={<h3>Welcome !!</h3>}/>
-            <Route path="bye" element={<h3>bye !!</h3>}/>
-          </Route>
-
+          <Route path="/salesRecord/*" element={<Sales/>}/>
+          <Route path="/inventory/*" element={<InventoryMaterial/>}/>
           <Route path="/login" element={<Login />} />
           <Route path="/users" element={<Users/>}/>
           <Route path="/users/:id" element={<User/>}/>
-          
           <Route path="/*" element={<NotFound/>}/>
         </Routes>
       </Box>
