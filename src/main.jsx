@@ -5,6 +5,6 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <p>{"Esta pagina no esta disponible, debido a un inconveniente! :("}</p>
   </React.StrictMode>,
 );
