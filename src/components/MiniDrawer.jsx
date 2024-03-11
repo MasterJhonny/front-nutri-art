@@ -169,6 +169,8 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const [list, setList] = useState(listItemModule);
 
+  const colorCustom = '#B931FC';
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -180,7 +182,7 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} color='inherit' sx={{ background: '#F4CE14' }}>
+      <AppBar position="fixed" open={open} color='inherit' sx={{ background: colorCustom }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -194,8 +196,8 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            EMPRESA "YOGURT NUTRI ART"
+          <Typography variant="h6" noWrap component="div" color={'#FFFDCB'}>
+            Nombre de tu empresa
           </Typography>
         </Toolbar>
       </AppBar>
@@ -221,7 +223,7 @@ export default function MiniDrawer() {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
-                    backgroundColor: item.active ? '#facc3c': '#ffff'
+                    backgroundColor: item.active ? colorCustom : '#ffff'
                   }}
                 >
                   <ListItemIcon
